@@ -47,6 +47,10 @@ wget https://repo.zabbix.com/zabbix/6.0/debian/pool/main/z/zabbix-release/zabbix
 sudo dpkg -i zabbix-release_6.0-4+debian11_all.deb
 sudo apt update
 
+![install  Zabbix](screenshot/zabbix.png)
+![виртуальная машина ](screenshot/yandex.png)
+
+
 # 4. Установка пакетов Zabbix
 sudo apt install -y zabbix-server-pgsql zabbix-frontend-php zabbix-apache-conf zabbix-sql-scripts zabbix-agent
 
