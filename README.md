@@ -23,6 +23,10 @@
 
 ---
 
+![zabbix](screenshot/zibix.png)
+![zabbix](screenshot/yandex.png)
+
+
 
 #### 1. Текст использованных команд
 
@@ -47,8 +51,7 @@ wget https://repo.zabbix.com/zabbix/6.0/debian/pool/main/z/zabbix-release/zabbix
 sudo dpkg -i zabbix-release_6.0-4+debian11_all.deb
 sudo apt update
 
-![install  Zabbix](screenshot/zibix.png)
-![виртуальная машина ](screenshot/yandex.png)
+
 
 
 # 4. Установка пакетов Zabbix
@@ -69,3 +72,63 @@ sudo systemctl enable zabbix-server zabbix-agent apache2
 # sudo a2dissite 000-default.conf
 # sudo systemctl restart apache2
 
+
+
+### Задание 2: Установка Zabbix Agent на два хоста
+
+**** Установите Zabbix Agent на два хоста.
+
+Процесс выполнения
+
+Выполняя ДЗ, сверяйтесь с процессом отражённым в записи лекции.
+Установите Zabbix Agent на 2 вирт.машины, одной из них может быть ваш Zabbix Server.
+Добавьте Zabbix Server в список разрешенных серверов ваших Zabbix Agentов.
+Добавьте Zabbix Agentов в раздел Configuration > Hosts вашего Zabbix Servera.
+Проверьте, что в разделе Latest Data начали появляться данные с добавленных агентов.
+Требования к результатам
+
+Приложите в файл README.md скриншот раздела Configuration > Hosts, где видно, что агенты подключены к серверу
+Приложите в файл README.md скриншот лога zabbix agent, где видно, что он работает с сервером
+Приложите в файл README.md скриншот раздела Monitoring > Latest data для обоих хостов, где видны поступающие от агентов данные.
+Приложите в файл README.md текст использованных команд в GitHub
+
+
+
+
+![zabbix](screenshot/zibix-agent.png)
+![zabbix](screenshot/zibix-rezult.png)
+
+
+
+
+
+**Процесс выполнения:**
+1.  Была создана вторая виртуальная машина `agent-host` в Yandex.Cloud в той же подсети, что и `zabbix-server`.
+2.  На обеих машинах (`zabbix-server` и `agent-host`) был настроен Zabbix Agent. В конфигурационном файле `zabbix_agentd.conf` были указаны `Server` (IP-адрес Zabbix Server) и `Hostname`.
+3.  В веб-интерфейсе Zabbix в разделе `Configuration > Hosts` были созданы/настроены оба хоста.
+4.  К каждому хосту был применен шаблон `Linux by Zabbix agent` для автоматического сбора стандартных метрик.
+5.  Была проведена проверка доступности агентов, логов и поступления данных.
+
+---
+
+#### 1. Текст использованных команд (на `agent-host`)
+
+```bash
+# 1. Установка репозитория Zabbix 6.0 LTS
+wget https://repo.zabbix.com/zabbix/6.0/debian/pool/main/z/zabbix-release/zabbix-release_6.0-4%2Bdebian11_all.deb
+sudo dpkg -i zabbix-release_6.0-4+debian11_all.deb
+sudo apt update
+
+# 2. Установка пакета Zabbix Agent
+sudo apt install -y zabbix-agent
+
+# 3. Настройка конфигурационного файла Zabbix Agent
+# sudo nano /etc/zabbix/zabbix_agentd.conf
+# В файле были изменены следующие строки:
+# Server=10.131.0.14 # IP-адрес Zabbix Server
+# ServerActive=10.131.0.14 # IP-адрес Zabbix Server
+# Hostname=Zabbix-agent-host # Уникальное имя хоста
+
+# 4. Запуск и добавление в автозагрузку сервиса
+sudo systemctl restart zabbix-agent
+sudo systemctl enable zabbix-agent
